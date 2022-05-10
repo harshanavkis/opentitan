@@ -232,5 +232,6 @@ in stdenv.mkDerivation rec {
 	zlib
 	xz
 	pkg-config
+	verilator
   ];
 }
