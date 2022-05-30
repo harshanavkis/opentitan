@@ -67,6 +67,20 @@ let
 	doCheck = false;
   };
 
+  markupsafe = buildPythonPackage rec{
+    name = "markupsafe";
+	version = "2.0.1";
+
+	src = pkgs.fetchurl {
+	  url = "https://github.com/pallets/markupsafe/archive/refs/tags/2.0.1.tar.gz";
+	  sha256 = "sha256-JJowJouuXAmC7k8xq7cSZXfANgIJKg8sZLBqT2gXazA=";
+    };
+
+	buildInputs = with self; [ ];
+
+	# doCheck = false;
+  };
+
   edalize = buildPythonPackage rec{
     name = "edalize";
     
@@ -216,7 +230,7 @@ in stdenv.mkDerivation rec {
 	libftdi1
     ncurses5
 	openssl
-	libudev
+	udev
 	libusb1
 	lsb-release
     ninja
