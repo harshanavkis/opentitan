@@ -41,6 +41,18 @@ let
 	doCheck = false;
   };
 
+  markupsafe = buildPythonPackage rec{
+    name = "markupsafe";
+	version = "2.0.1";
+
+	src = pkgs.fetchurl {
+	  url = "https://github.com/pallets/markupsafe/archive/refs/tags/2.0.1.tar.gz";
+	  sha256 = "sha256-JJowJouuXAmC7k8xq7cSZXfANgIJKg8sZLBqT2gXazA=";
+    };
+
+	doCheck = false;
+  };
+
   jinja2 = buildPythonPackage rec{
     name = "jinja2";
 	version = "2.11.3";
@@ -65,20 +77,6 @@ let
 	buildInputs = with self; [ colorama ];
 
 	doCheck = false;
-  };
-
-  markupsafe = buildPythonPackage rec{
-    name = "markupsafe";
-	version = "2.0.1";
-
-	src = pkgs.fetchurl {
-	  url = "https://github.com/pallets/markupsafe/archive/refs/tags/2.0.1.tar.gz";
-	  sha256 = "sha256-JJowJouuXAmC7k8xq7cSZXfANgIJKg8sZLBqT2gXazA=";
-    };
-
-	buildInputs = with self; [ ];
-
-	# doCheck = false;
   };
 
   edalize = buildPythonPackage rec{
@@ -164,7 +162,7 @@ let
     doCheck = false;
   };
 
-  mypython = python39.withPackages(ps: with ps; [
+  mypython = (python39.withPackages(ps: with ps; [
     hjson
     libcst
 	Mako
@@ -195,6 +193,8 @@ let
     # Minimum matches version in meson.build
     meson
 
+    markupsafe
+
 	# Development version with OT-specific changes
 	okonomiyaki
 	simplesat
@@ -204,7 +204,7 @@ let
 
 	# Development version of ChipWhisperer toolchain
 	# ig for now
-  ]);
+  ])).override (args: { ignoreCollisions = true; });
 
 in stdenv.mkDerivation rec {
   name = "opentitan-env";
