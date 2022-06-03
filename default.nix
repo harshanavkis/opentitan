@@ -1,8 +1,10 @@
-with import <nixpkgs> {};
+with import (builtins.fetchTarball {
+  url = "https://github.com/NixOS/nixpkgs/archive/a7ecde854aee5c4c7cd6177f54a99d2c1ff28a31.tar.gz";
+  sha256 = "sha256:162dywda2dvfj1248afxc45kcrg83appjd0nmdb541hl7rnncf02";
+}) {};
 with python39Packages;
 
 let
-
   lizard = buildPythonPackage rec{
     name = "lizard";
     version = "1.17.9";
@@ -36,18 +38,6 @@ let
     src = pkgs.fetchurl {
       url = "https://github.com/mesonbuild/meson/releases/download/${version}/meson-${version}.tar.gz";
       sha256 = "sha256-cuHHgrqb2iBPSh7Vf5jQJ9e265QUxyPuu9bsfxlVyKY=";
-    };
-
-    doCheck = false;
-  };
-
-  markupsafe = buildPythonPackage rec{
-    name = "markupsafe";
-    version = "2.0.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/pallets/markupsafe/archive/refs/tags/2.0.1.tar.gz";
-      sha256 = "sha256-JJowJouuXAmC7k8xq7cSZXfANgIJKg8sZLBqT2gXazA=";
     };
 
     doCheck = false;
@@ -162,7 +152,7 @@ let
     doCheck = false;
   };
 
-  mypython = (python39.withPackages(ps: with ps; [
+  mypython = python39.withPackages(ps: with ps; [
     hjson
     libcst
     Mako
@@ -193,8 +183,6 @@ let
     # Minimum matches version in meson.build
     meson
 
-    markupsafe
-
     # Development version with OT-specific changes
     okonomiyaki
     simplesat
@@ -204,7 +192,7 @@ let
 
     # Development version of ChipWhisperer toolchain
     # ig for now
-  ])).override (args: { ignoreCollisions = true; });
+  ]);
 
 in stdenv.mkDerivation rec {
   name = "opentitan-env";
